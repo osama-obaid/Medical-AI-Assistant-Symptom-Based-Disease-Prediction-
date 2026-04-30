@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Medical AI Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Smart Medical Assistant</h2>
+      <p>Chat with the AI about your symptoms for a quick consultation.</p>
+    </div>
+
+    <div class="chat-container" id="chat-container">
+      
+    </div>
+
+    <div class="input-container">
+      <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+
+   
+  </div>
+
+  <script>
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('user-input');
+    const symptomsList = document.getElementById('symptoms-list');
+    let selectedSymptoms = [];
+
+    // Load symptoms when page starts
+    window.onload = function () {
+      fetch('/symptoms')
+        .then(res => res.json())
+        .then(data => {
+          data.symptoms.forEach(symptom => {
+            const chip = document.createElement('div');
+            chip.classList.add('symptom-chip');
+            chip.textContent = symptom;
+            chip.onclick = () => toggleSymptom(chip, symptom);
+            symptomsList.appendChild(chip);
+          });
+        })
+        .catch(err => console.error('Error loading symptoms:', err));
+    };
+
+    function addMessage(text, isUser = false) {
+      const msg = document.createElement('div');
+      msg.classList.add('message', isUser ? 'user-message' : 'bot-message');
+      msg.textContent = text;
+      chatContainer.appendChild(msg);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      addMessage(message, true);
+      userInput.value = '';
+
+      fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      })
+        .then(res => res.json())
+        .then(data => addMessage(data.response))
+        .catch(err => {
+          console.error('Error:', err);
+          addMessage('Sorry, something went wrong.');
+        });
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') sendMessage();
+    }
+
+    function toggleSymptom(el, symptom) {
+      el.classList.toggle('selected');
+      if (selectedSymptoms.includes(symptom)) {
+        selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
+      } else {
+        selectedSymptoms.push(symptom);
+      }
+    }
+
+    
+  </script>
+</body>
+</html>

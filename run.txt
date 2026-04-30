@@ -1,0 +1,32 @@
+To run the project you wish to do this thinks:
+1-install library
+    bash
+    pip install -r requirements.txt
+
+
+2-run this codes  in terminal to test And train the model where project path
+    python   (click Enter then Paste the list) 
+    from data_processor import DataProcessor
+    dp = DataProcessor()
+    dp.load_data()
+    dp.train_model()
+    dp.evaluate_model()
+
+
+    will make  a print of this files 
+        models/
+        ├── symptom_checker.pkl
+        ├── label_encoder.pkl
+        └── symptom_names.pkl
+
+
+
+3_To Start the program in the server
+    bash
+    python app.py
+
+
+
+4-Go to this host to find the chat page
+    http://localhost:5000
+    

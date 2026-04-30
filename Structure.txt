@@ -1,0 +1,19 @@
+medical_ai_project/
+│
+├── app.py
+├── medical_ai.py
+├── models/
+│   ├── symptom_checker.pkl
+│   ├── vectorizer.pkl
+│   └── label_encoder.pkl
+├── data/
+|   --- dataset.csv
+|    -- Trining.csv
+│   ├── symptom_Description.csv
+│   ├── symptom_precaution.csv
+│   └── Symptom_severity.csv
+├── templates/
+│   └── index.html
+├── static/
+│   └── style.css
+└── requirements.txt
